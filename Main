@@ -1,0 +1,70 @@
+package tarea2;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		ConexionBD db = new ConexionBD();
+		Connection conexion = db.mySQLConnect();
+
+		int opcion = 0;
+
+		do {
+			opcion = MetodosComunes.introduceNumero(
+					"------MENÚ BIBLIOTECA------\n" + "1. Insertar libro\n" + "2. Mostrar todos los libros\n"
+							+ "3. Buscar libros por autor\n" + "4. Actualizar precio de un libro\n"
+							+ "5. Eliminar libro\n" + "0. Salir\n" + "Elige una opción:");
+			switch (opcion) {
+			case 1:
+
+				String titulo = MetodosComunes.introduceLetra("Introduzca el título:");
+
+				String autor = MetodosComunes.introduceLetra("Introduzca el autor:");
+
+				String genero = MetodosComunes.introduceLetra("Introduzca el género:");
+
+				double precio = MetodosComunes.introducaDouble("Introduzca el precio:");
+
+				boolean disponible = MetodosComunes.introduceBoolean("Introduzca si está disponible: (true/false)");
+
+				LibroDAO.insertarLibro(titulo, autor, genero, precio, disponible, conexion);
+				break;
+			case 2:
+				LibroDAO.mostrarLibros(conexion);
+				break;
+			case 3:
+				String autor2 = MetodosComunes.introduceLetra("Introduzca el autor:");
+				LibroDAO.buscarLibroAutor(conexion, autor2);
+				break;
+			case 4:
+				int id = MetodosComunes.introduceNumero("Introduzca el id:");
+
+				double precio2 = MetodosComunes.introducaDouble("Introduzca el precio:");
+
+				LibroDAO.actualizarPrecio(conexion, id, precio2);
+				break;
+			case 5:
+				int id2 = MetodosComunes.introduceNumero("Introduzca el id:");
+				LibroDAO.eliminarLibro(conexion, id2);
+				break;
+			case 0:
+				System.out.println("Fin - Cerramos conexión");
+				try {
+					conexion.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				break;
+			default:
+				System.err.println("ERROR: Opción incorrecta");
+				break;
+			}
+
+		} while (opcion != 0);
+
+	}
+
+}
