@@ -1,0 +1,141 @@
+package tarea2;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class LibroDAO {
+
+	public static void insertarLibro(String titulo, String autor, String genero, double precio, boolean disponible,
+			Connection conexion) {
+
+		String query = "INSERT INTO libros (titulo, autor, genero, precio, disponible) VALUES (?,?,?,?,?)";
+
+		try {
+
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setString(1, titulo);
+			ps.setString(2, autor);
+			ps.setString(3, genero);
+			ps.setDouble(4, precio);
+			ps.setBoolean(5, disponible);
+
+			int resultado = ps.executeUpdate();
+
+			if (resultado > 0) {
+				System.out.println("Libro añadido con ÉXITO");
+			} else {
+				System.err.println("ERROR: El libro no se ha podido añadir");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void mostrarLibros(Connection conexion) {
+
+		boolean encontrado = false;
+
+		String query = "SELECT * FROM libros";
+
+		try {
+
+			Statement comando = conexion.createStatement();
+
+			ResultSet resultado = comando.executeQuery(query);
+
+			System.out.println("LISTA DE LIBROS: ");
+			while (resultado.next()) {
+				encontrado = true;
+				System.out.println("id: " + resultado.getInt("id") + "\nTítulo: " + resultado.getString("titulo")
+						+ "\nAutor: " + resultado.getString("autor") + "\nGénero: " + resultado.getString("genero")
+						+ "\nPrecio: " + resultado.getDouble("precio") + "\nDisponible: "
+						+ resultado.getBoolean("disponible"));
+
+				System.out.println("-----------------------------------");
+			}
+
+			if (!encontrado) {
+				System.err.println("ERROR: No se han encontrado libros");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void buscarLibroAutor(Connection conexion, String autor) {
+
+		boolean encontrado = false;
+		String query = "SELECT * FROM libros WHERE autor=?";
+
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setString(1, autor);
+
+			ResultSet resultado = ps.executeQuery();
+
+			while (resultado.next()) {
+				encontrado = true;
+				System.out.println("id: " + resultado.getInt("id") + "\nTítulo: " + resultado.getString("titulo")
+						+ "\nAutor: " + resultado.getString("autor") + "\nGénero: " + resultado.getString("genero")
+						+ "\nPrecio: " + resultado.getDouble("precio") + "\nDisponible: "
+						+ resultado.getBoolean("disponible"));
+
+				System.out.println("-----------------------------------");
+			}
+
+			if (!encontrado) {
+				System.err.println("ERROR: No se han encontrado libros de ese autor");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void actualizarPrecio(Connection conexion, int id, double precio) {
+
+		String query = "UPDATE libros SET precio=? WHERE id=?";
+
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setDouble(1, precio);
+			ps.setInt(2, id);
+
+			int resultado = ps.executeUpdate();
+
+			if (resultado > 0) {
+				System.out.println("Precio actualizado con ÉXITO");
+			} else {
+				System.err.println("ERROR: No se ha podido actualizar el precio");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void eliminarLibro(Connection conexion, int id) {
+
+		String query = "DELETE FROM libros WHERE id = ?";
+
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, id);
+
+			int resultado = ps.executeUpdate();
+
+			if (resultado > 0) {
+				System.out.println("Libro eliminado con ÉXITO");
+			} else {
+				System.err.println("ERROR: No se ha podido eliminar el libro");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
