@@ -3,9 +3,9 @@
 2.  Añade el **MySQL Connector/J** a las librerías del proyecto.
 3.  Modifica las credenciales en la clase `ConexionBD.java`:
     ```java
-    private static final String URL = "jdbc:mysql://localhost:3306/biblioteca_db";
-    private static final String USER = "tu_usuario";
-    private static final String PASS = "tu_contraseña";
+    String URL = "jdbc:mysql://localhost:3306/biblioteca_db";
+    String USER = "tu_usuario";
+    String PASS = "tu_contraseña";
     ```
 
 ---
@@ -75,6 +75,8 @@ CREATE TABLE libros (
 INSERT INTO libros (titulo, autor, genero, precio, disponible) VALUES 
 ('El Quijote', 'Miguel de Cervantes', 'Novela', 15.50, true),
 ('1984', 'George Orwell', 'Ciencia ficción', 12.75, false);
+
+
 2. Configuración de Java
 Importa el proyecto en tu IDE preferido.
 
@@ -83,9 +85,9 @@ Añade el MySQL Connector/J a las librerías del proyecto.
 Modifica las credenciales en la clase ConexionBD.java:
 
 Java
-private static final String URL = "jdbc:mysql://localhost:3306/biblioteca_db";
-private static final String USER = "tu_usuario";
-private static final String PASS = "tu_contraseña";
+String URL = "jdbc:mysql://localhost:3306/biblioteca_db";
+String USER = "tu_usuario";
+String PASS = "tu_contraseña";
 📂 Estructura del Código
 Libro.java: Modelo que define la entidad y sus atributos.
 
